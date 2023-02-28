@@ -1,4 +1,3 @@
-import scrapy
 import csv
 import sqlite3
 
@@ -6,8 +5,8 @@ conn = sqlite3.connect('steamCards.db')
 cursor = conn.cursor()
 cursor.execute('''
     CREATE TABLE cards (
-            id PRIMARY KEY,
-            steamID INTEGER,
+            id INTEGER AUTOINCREMENT,
+            steamID INTEGER PRIMARY KEY,
             name TEXT,
             dateAdded DATE
     )
