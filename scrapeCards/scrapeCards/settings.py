@@ -11,7 +11,11 @@ BOT_NAME = "scrapeCards"
 
 SPIDER_MODULES = ["scrapeCards.spiders"]
 NEWSPIDER_MODULE = "scrapeCards.spiders"
+LOG_ENABLED = False
 
+ITEM_PIPELINES = {
+    'scrapeCards.pipelines.JsonWriterPipeline': 300,
+}
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "scrapeCards (+http://www.yourdomain.com)"
