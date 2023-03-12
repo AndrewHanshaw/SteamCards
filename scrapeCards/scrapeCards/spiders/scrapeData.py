@@ -12,8 +12,8 @@ steamIDfromUser = int(input("Enter Steam ID: "))
 cursor.execute('SELECT * FROM cards WHERE steamID=? LIMIT 1', (steamIDfromUser,))
 row = cursor.fetchone()
 name = row[2]
-cardSearchURL = 'https://steamcommunity.com/market/search?q='+urllib.parse.quote_plus('"'+name+' Trading Card"')+'#p1_popular_desc'
-boosterSearchURL = 'https://steamcommunity.com/market/search?q='+urllib.parse.quote_plus('"'+name+' Booster Pack"')+'#p1_popular_desc'
+cardSearchURL = row[4]
+boosterSearchURL = row[5]
 cards = []
 booster = []
 
@@ -21,6 +21,11 @@ class cardSpider(scrapy.Spider):
     name = "scrapeCards"
     allowed_domains = ["steampowered.com"]
     start_urls = [cardSearchURL]
+
+    custom_settings = {
+        'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7',
+        'LOG_FILE': 'scrapy.log'
+    }
 
     def parse(self, response):
         for rowLink in response.css('a.market_listing_row_link'):
@@ -38,6 +43,11 @@ class boosterSpider(scrapy.Spider):
     name = "scrapeBooster"
     allowed_domains = ["steampowered.com"]
     start_urls = [boosterSearchURL]
+
+    custom_settings = {
+        'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7',
+        'LOG_FILE': 'scrapy.log'
+    }
 
     def parse(self, response):
         for rowLink in response.css('a.market_listing_row_link'):
@@ -59,7 +69,7 @@ expectedSaleValue = 0
 for i in cards:
     i['saleValue'] = feeCalc.feeCalc(i['price'])
     expectedSaleValue+=i['saleValue']
-expectedSaleValue = expectedSaleValue/len(cards)*3
-expectedProfit = expectedSaleValue - booster[0]['price']
+expectedSaleValue = round(expectedSaleValue/len(cards)*3,3)
+expectedProfit = round(expectedSaleValue - booster[0]['price'], 3)
 print('Expected Profit:', expectedProfit)
         
