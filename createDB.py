@@ -6,8 +6,8 @@ conn = sqlite3.connect('steamCards.db')
 cursor = conn.cursor()
 cursor.execute('''
     CREATE TABLE cards (
-            id INTEGER AUTO_INCREMENT,
-            steamID INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY,
+            steamID INTEGER,
             name TEXT,
             dateAdded DATE,
             cardSearchURL VARCHAR(500),
